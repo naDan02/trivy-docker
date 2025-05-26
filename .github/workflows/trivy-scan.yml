@@ -5,9 +5,9 @@ on:
     branches: [main, master]
   pull_request:
     branches: [main, master]
-  schedule:
-    # Exécute un scan quotidien à minuit (UTC)
-    - cron: "0 0 * * *"
+  # schedule:
+  #   # Exécute un scan quotidien à minuit (UTC)
+  #   - cron: "0 0 * * *"
 
 jobs:
   trivy-scan:
@@ -45,7 +45,7 @@ jobs:
           # Niveau de gravité minimum à afficher
           severity: "CRITICAL,HIGH,MEDIUM,LOW,UNKNOWN"
           # Types de vulnérabilités à scanner
-          scanners: "vuln"
+          # scanners: "vuln"
           # Sortie le rapport dans un fichier
           output: "trivy-results.txt"
           # Quitte avec un code d'erreur si des vulnérabilités critiques sont trouvées
@@ -56,7 +56,7 @@ jobs:
       # Étape 6: Upload le rapport (optionnel)
       - name: Upload Trivy scan results
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: trivy-scan-results
           path: trivy-results.txt
