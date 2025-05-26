@@ -40,15 +40,17 @@ jobs:
       #     password: ${{ secrets.DOCKER_HUB_TOKEN }}
 
       # Étape 4: Construire l'image Docker
-      - name: Build Docker image
-        run: docker-compose -f docker-compose.yml build
+      - name: Build and tag Docker image
+        run: |
+          docker-compose -f docker-compose.yml build
+          docker tag web:latest localhost:5000/web:latest
 
       # Étape 5: Scanner l'image avec Trivy
       - name: Scan image with Trivy
         uses: aquasecurity/trivy-action@0.14.0
         with:
           # Scan l'image que vous venez de construire
-          image-ref: "web:latest"
+          image-ref: "localhost:5000/web:latest"
           # Format de sortie du rapport
           format: "table"
           # Niveau de gravité minimum à afficher
