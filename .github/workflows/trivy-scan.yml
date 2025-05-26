@@ -43,14 +43,20 @@ jobs:
       - name: Build and tag Docker image
         run: |
           docker-compose -f docker-compose.yml build
-          docker tag web:latest localhost:5000/web:latest
+          echo "=== Images Docker disponibles ==="
+          docker images
+          echo "=== Identification de l'image construite ==="
+          # Trouver l'image qui contient 'web' dans son nom
+          IMAGE_NAME=$(docker images --format "table {{.Repository}}:{{.Tag}}" | grep -E "(web|$(basename $PWD))" | head -1)
+          echo "Image trouvée: $IMAGE_NAME"
+          echo "IMAGE_NAME=$IMAGE_NAME" >> $GITHUB_ENV
 
       # Étape 5: Scanner l'image avec Trivy
       - name: Scan image with Trivy
         uses: aquasecurity/trivy-action@0.14.0
         with:
           # Scan l'image que vous venez de construire
-          image-ref: "localhost:5000/web:latest"
+          image-ref: ${{ env.IMAGE_NAME }}
           # Format de sortie du rapport
           format: "table"
           # Niveau de gravité minimum à afficher
