@@ -18,7 +18,8 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "docker-build": "docker build -t trivy-docker .",
-    "docker-start": "docker run -p 3000:3000 trivy-docker"
+    "docker-start": "docker run -p 3000:3000 trivy-docker",
+    "trivy-scan": "docker run -v /var/run/docker.sock:/var/run/docker.sock -v $HOME/Library/Caches:/root/.cache/ aquasec/trivy image trivy-docker"
   },
   "eslintConfig": {
     "extends": [
